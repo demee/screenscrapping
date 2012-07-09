@@ -9,8 +9,8 @@ var SCREEN_WIDTH = 1024;
 var utils = require('utils');
 
 var casper = require('casper').create({
-    verbose: true,
-    logLevel: "debug", 
+    //verbose: true,
+    //logLevel: "debug", 
     httpStatusHandlers: {
         404: function(self, resource) {
             this.log("Resource at " + resource.url + " not found (404)", "warning");
@@ -145,7 +145,19 @@ var commands = {
         });
     }, 
     overview: function(){
+        casper.then(function(){
+            var items = this.evaluate(function(){
+                var elements = document.querySelectorAll("#show_summary tr"); 
+                var items = []; 
+                _.each(elements, function(element){
+                    items.push(element.innerText);
+                });
 
+                return items; 
+            });
+
+            this.echo(items);
+        });
     }
 };
 
